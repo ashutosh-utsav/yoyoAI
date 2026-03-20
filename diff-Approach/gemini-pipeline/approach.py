@@ -105,14 +105,15 @@ def delete_uploaded_file(uploaded_file):
 if __name__ == "__main__":
     import glob
     import os
+    import json
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     audio_dir = os.path.join(base_path, "audio")
     audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
     
-    if not audio_files:
-        print(f"No audio files found in {audio_dir}.")
-        
+    evaluation_results = {}
+    
     for audio_file in audio_files:
+        filename = os.path.basename(audio_file)
         print("\n" + "="*70)
         print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
         print("="*70)
@@ -120,26 +121,25 @@ if __name__ == "__main__":
         try:
             uploaded = upload_audio(audio_file)
             result   = analyze_audio_with_gemini(uploaded)
-            print("\n" + "=" * 52)
-            print(f"FINAL RESULTS  (Gemini {MODEL_ID})")
-            print("=" * 52)
-            if "analysis" in result:
-                print(f"\n  Analysis: {result['analysis']}\n")
+            
+            file_eval = {}
             for conv_key in ["Conversation_1", "Conversation_2"]:
                 if conv_key in result:
-                    c     = result[conv_key]
-                    start = c.get("start_fmt", "??:??")
-                    end   = c.get("end_fmt",   "??:??")
-                    conf  = c.get("confidence", "?")
-                    notes = c.get("notes", "")
                     label = conv_key.replace("_", " ")
-                    print(f"  {label}: [ {start} --> {end} ]  (confidence: {conf})")
-                    if notes:
-                        print(f"           Note: {notes}")
-            print("\n  --- Full JSON ---")
-            print(json.dumps(result, indent=2, ensure_ascii=False))
+                    c = result[conv_key]
+                    file_eval[label] = {
+                        "start": round(float(c.get("start_seconds", 0.0)), 2),
+                        "end": round(float(c.get("end_seconds", 0.0)), 2)
+                    }
+            evaluation_results[filename] = file_eval
+            print(f"-> Successfully processed {filename}")
         except Exception as e:
-            print(f"\nPipeline Error: {e}")
+            print(f"Pipeline Error on {filename}: {e}")
         finally:
             if uploaded:
                 delete_uploaded_file(uploaded)
+                
+    print("\n" + "=" * 52)
+    print("EVALUATION OUTPUT (JSON FORMAT)")
+    print("=" * 52)
+    print(json.dumps(evaluation_results, indent=2))

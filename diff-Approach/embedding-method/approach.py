@@ -56,28 +56,34 @@ def find_semantic_boundaries(transcript_blocks, window_size=3):
 if __name__ == "__main__":
     import glob
     import os
+    import json
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     audio_dir = os.path.join(base_path, "audio")
     audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
     
-    if not audio_files:
-        print(f"No audio files found in {audio_dir}.")
-        
+    evaluation_results = {}
+    
     for audio_file in audio_files:
+        filename = os.path.basename(audio_file)
         print("\n" + "="*70)
         print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
         print("="*70)
         try:
             raw_transcript = get_transcript_data(audio_file)
             boundaries = find_semantic_boundaries(raw_transcript, window_size=2)
-            print("\n" + "="*40)
-            print("FINAL CONVERSATION BOUNDARIES")
-            print("="*40)
-            def format_time(seconds):
-                return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
+            
+            file_eval = {}
             for conv, times in boundaries.items():
-                start_fmt = format_time(times['start'])
-                end_fmt = format_time(times['end'])
-                print(f"{conv}: [ {start_fmt} --> {end_fmt} ]")
+                file_eval[conv] = {
+                    "start": round(times['start'], 2),
+                    "end": round(times['end'], 2)
+                }
+            evaluation_results[filename] = file_eval
+            print(f"-> Successfully processed {filename}")
         except Exception as e:
-            print(f"\nPipeline Error: {e}")
+            print(f"Pipeline Error on {filename}: {e}")
+            
+    print("\n" + "=" * 52)
+    print("EVALUATION OUTPUT (JSON FORMAT)")
+    print("=" * 52)
+    print(json.dumps(evaluation_results, indent=2))

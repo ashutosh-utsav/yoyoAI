@@ -137,6 +137,7 @@ Listen to the audio. Identify the precise start and end timestamps (IN MM:SS FOR
 if __name__ == "__main__":
     import glob
     import os
+    import json
     
     base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     audio_dir = os.path.join(base_path, "audio")
@@ -145,8 +146,11 @@ if __name__ == "__main__":
     if not audio_files:
         print(f"No audio files found in {audio_dir}.")
         
+    evaluation_results = {}
+        
     for original_audio_path in audio_files:
-        print("\\n" + "="*70)
+        filename = os.path.basename(original_audio_path)
+        print("\n" + "="*70)
         print(f"PROCESSING EXTERNAL AUDIO FILE: {original_audio_path}")
         print("="*70)
         
@@ -155,18 +159,8 @@ if __name__ == "__main__":
         uploaded_file = None
         try:
             ledger = compress_audio_and_build_ledger(original_audio_path, temp_compressed_path)
-            
             uploaded_file = upload_audio(temp_compressed_path)
-            
             gemini_result = analyze_audio_with_gemini(uploaded_file)
-
-            print("\\n[4/4] Translating timestamps back to reality using Ledger...")
-            
-            print("\\n" + "=" * 52)
-            print(f"FINAL TRUE BOUNDARIES (VAD + Gemini {MODEL_ID})")
-            print("=" * 52)
-
-            print(f"\\nAnalysis: {gemini_result['analysis']}\\n")
 
             def parse_mmss(time_str: str) -> float:
                 try:
@@ -179,25 +173,28 @@ if __name__ == "__main__":
                     pass
                 return 0.0
 
+            file_eval = {}
             for conv_key in ["Conversation_1", "Conversation_2"]:
+                if conv_key not in gemini_result:
+                    continue
                 c = gemini_result[conv_key]
-                
-                compressed_start_sec = parse_mmss(c["start_time"])
-                compressed_end_sec = parse_mmss(c["end_time"])
+                compressed_start_sec = parse_mmss(c.get("start_time", "00:00"))
+                compressed_end_sec = parse_mmss(c.get("end_time", "00:00"))
 
                 true_start_sec = get_original_time(compressed_start_sec, ledger)
                 true_end_sec = get_original_time(compressed_end_sec, ledger)
                 
-                conf = c["confidence"]
-                notes = c["notes"]
                 label = conv_key.replace("_", " ")
-                
-                print(f"{label}: [ {format_time(true_start_sec)} --> {format_time(true_end_sec)} ] (Confidence: {conf})")
-                if notes:
-                    print(f"           Note: {notes}")
+                file_eval[label] = {
+                    "start": round(true_start_sec, 2),
+                    "end": round(true_end_sec, 2)
+                }
+            
+            evaluation_results[filename] = file_eval
+            print(f"-> Successfully processed {filename}")
 
         except Exception as e:
-            print(f"\\nPipeline Error: {e}")
+            print(f"\nPipeline Error on {filename}: {e}")
 
         finally:
             if uploaded_file:
@@ -207,3 +204,8 @@ if __name__ == "__main__":
                     pass
             if os.path.exists(temp_compressed_path):
                 os.remove(temp_compressed_path)
+                
+    print("\n" + "=" * 52)
+    print("EVALUATION OUTPUT (JSON FORMAT)")
+    print("=" * 52)
+    print(json.dumps(evaluation_results, indent=2))

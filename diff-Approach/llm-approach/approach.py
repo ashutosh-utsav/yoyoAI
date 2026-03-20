@@ -73,19 +73,31 @@ if __name__ == "__main__":
     audio_dir = os.path.join(base_path, "audio")
     audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
     
-    if not audio_files:
-        print(f"No audio files found in {audio_dir}.")
-        
+    evaluation_results = {}
+    
     for audio_file in audio_files:
+        filename = os.path.basename(audio_file)
         print("\n" + "="*70)
         print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
         print("="*70)
         try:
             raw_transcript = get_transcript_data(audio_file)
             final_boundaries = analyze_with_openai(raw_transcript)
-            print("\n" + "="*40)
-            print("FINAL CONVERSATION BOUNDARIES (GPT-4o)")
-            print("="*40)
-            print(json.dumps(final_boundaries, indent=2))
+            
+            file_eval = {}
+            if isinstance(final_boundaries, dict):
+                for conv, times in final_boundaries.items():
+                    if isinstance(times, dict) and 'start' in times and 'end' in times:
+                        file_eval[conv.replace("_", " ")] = {
+                            "start": round(float(times['start']), 2),
+                            "end": round(float(times['end']), 2)
+                        }
+            evaluation_results[filename] = file_eval
+            print(f"-> Successfully processed {filename}")
         except Exception as e:
-            print(f"\nPipeline Error: {e}")
+            print(f"Pipeline Error on {filename}: {e}")
+            
+    print("\n" + "=" * 52)
+    print("EVALUATION OUTPUT (JSON FORMAT)")
+    print("=" * 52)
+    print(json.dumps(evaluation_results, indent=2))
