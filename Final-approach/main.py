@@ -35,6 +35,10 @@ def compress_audio_and_build_ledger(input_path: str, output_path: str):
     audio = AudioSegment.from_file(input_path)
     
     print("      Detecting speech segments...")
+
+    #TODO: Implement dynamic noise-floor detection for the VAD threshold to handle different retail environments (e.g., quiet boutiques vs. loud markets)
+    #TODO: Add support for different audio formats (WAV, FLAC, etc.)
+    
     nonsilent_ranges = detect_nonsilent(audio, min_silence_len=2000, silence_thresh=-40)
     
     if not nonsilent_ranges:

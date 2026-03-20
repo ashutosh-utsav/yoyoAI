@@ -1,18 +1,57 @@
 {
   "approach_name": "sarvam-pipeline",
-  "files_evaluated": 0,
-  "overall_mean_iou": 0.0,
-  "overall_start_error_sec": 0.0,
-  "overall_end_error_sec": 0.0,
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.5833,
+  "overall_start_error_sec": 132.78,
+  "overall_end_error_sec": 103.62,
   "details": {
     "Sample1KN.mp3": {
-      "status": "Missing completely in predictions"
+      "Conversation 1": {
+        "IoU": 0.572,
+        "Start_Error_sec": 8.61,
+        "End_Error_sec": 271.23,
+        "pred_start": 7.39,
+        "pred_end": 661.23,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
     },
     "Sample2EN.mp3": {
-      "status": "Missing completely in predictions"
+      "Conversation 1": {
+        "IoU": 0.9005,
+        "Start_Error_sec": 14.59,
+        "End_Error_sec": 22.43,
+        "pred_start": 32.59,
+        "pred_end": 367.57,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.4396,
+        "Start_Error_sec": 504.37,
+        "End_Error_sec": 0.53,
+        "pred_start": 20.63,
+        "pred_end": 921.53,
+        "true_start": 525.0,
+        "true_end": 921.0
+      }
     },
     "sample3KN.mp3": {
-      "status": "Missing completely in predictions"
+      "Conversation 1": {
+        "status": "Missing or dropped"
+      },
+      "Conversation 2": {
+        "IoU": 0.4213,
+        "Start_Error_sec": 3.55,
+        "End_Error_sec": 120.29,
+        "pred_start": 151.55,
+        "pred_end": 241.71,
+        "true_start": 148.0,
+        "true_end": 362.0
+      }
     }
   }
 }
