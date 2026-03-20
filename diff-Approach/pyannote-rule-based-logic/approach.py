@@ -2,11 +2,14 @@ import os
 import time
 from dotenv import load_dotenv
 from pyannoteai.sdk import Client
+
 load_dotenv()
+
 API_KEY = os.getenv("PYANNOTE_API_KEY")
 if not API_KEY:
     raise ValueError("API Key not found. Please check your .env file.")
 client = Client(API_KEY)
+
 def get_diarization_data(audio_path):
     """Uploads the file and returns the Pyannote timeline data."""
     print(f"Uploading {audio_path}...")
@@ -20,6 +23,8 @@ def get_diarization_data(audio_path):
         elif job["status"] in ["failed", "canceled"]:
             raise Exception("Job failed.")
         time.sleep(5)
+
+
 def find_conversation_boundaries(timeline):
     """
     Analyzes the timeline to find Staff, Customers, and Conversation boundaries.
@@ -67,6 +72,8 @@ def find_conversation_boundaries(timeline):
         "Conversation 1": {"start": conv1_start, "end": conv1_end},
         "Conversation 2": {"start": conv2_start, "end": conv2_end}
     }
+
+
 if __name__ == "__main__":
     import glob
     import os

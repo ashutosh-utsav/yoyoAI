@@ -2,11 +2,15 @@ import os
 import time
 from dotenv import load_dotenv
 from pyannoteai.sdk import Client
+
 load_dotenv()
+
 API_KEY = os.getenv("PYANNOTE_API_KEY")
+
 if not API_KEY:
     raise ValueError("API Key not found. Please check your .env file.")
 client = Client(API_KEY)
+
 def get_transcript_data(audio_path):
     print(f"\n[1/3] Uploading {audio_path}...")
     media_url = client.upload(audio_path)
@@ -19,6 +23,8 @@ def get_transcript_data(audio_path):
         elif job["status"] in ["failed", "canceled"]:
             raise Exception("API Job failed.")
         time.sleep(5)
+
+
 def analyze_sessions(transcript):
     print("[3/3] Executing Deterministic Session Merging...")
     speaker_stats = {}
@@ -68,6 +74,9 @@ def analyze_sessions(transcript):
                 end_anchor = max(end_anchor, b["end"])
         results[f"Conversation {i+1}"] = {"start": start_anchor, "end": end_anchor}
     return results
+
+
+
 if __name__ == "__main__":
     import glob
     import os

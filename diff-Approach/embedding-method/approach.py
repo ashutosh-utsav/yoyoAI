@@ -5,13 +5,20 @@ from dotenv import load_dotenv
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from pyannoteai.sdk import Client
+
 load_dotenv()
+
 API_KEY = os.getenv("PYANNOTE_API_KEY")
+
 if not API_KEY:
     raise ValueError("API Key not found. Please check your .env file.")
+
 client = Client(API_KEY)
+
 print("Loading multilingual embedding model... (This runs locally)")
+
 embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
 def get_transcript_data(audio_path):
     """Uploads the file and returns the speaker-attributed transcript."""
     print(f"\nUploading {audio_path} to pyannoteAI...")
@@ -26,6 +33,8 @@ def get_transcript_data(audio_path):
             raise Exception("Job failed.")
         print("Polling API... waiting 5 seconds.")
         time.sleep(5)
+
+
 def find_semantic_boundaries(transcript_blocks, window_size=3):
     """
     Finds the conversation split by calculating cosine similarity between 
@@ -53,6 +62,8 @@ def find_semantic_boundaries(transcript_blocks, window_size=3):
         "Conversation 1": {"start": conv1_start, "end": conv1_end},
         "Conversation 2": {"start": conv2_start, "end": conv2_end}
     }
+
+
 if __name__ == "__main__":
     import glob
     import os

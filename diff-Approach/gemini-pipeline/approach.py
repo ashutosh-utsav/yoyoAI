@@ -5,12 +5,17 @@ from pathlib import Path
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
 load_dotenv()
+
 GEMINI_KEY = os.getenv("GEMINI_AI_API")
+
 if not GEMINI_KEY:
     raise ValueError("Missing GEMINI_AI_API in .env")
 client = genai.Client(api_key=GEMINI_KEY)
+
 MODEL_ID = "gemini-2.5-flash"
+
 def upload_audio(audio_path: str):
     """
     Uploads the audio file to Gemini Files API.
@@ -30,6 +35,8 @@ def upload_audio(audio_path: str):
         raise RuntimeError(f"Gemini file upload failed: {uploaded.name}")
     print(f"      File ready: {uploaded.uri}")
     return uploaded
+
+
 def analyze_audio_with_gemini(uploaded_file) -> dict:
     """
     Sends the audio directly to Gemini 2.5 Flash.
@@ -95,6 +102,8 @@ Return ONLY a valid raw JSON object, no markdown. Use this exact format:
     if raw.endswith("```"):
         raw = raw[:-3]
     return json.loads(raw.strip())
+
+
 def delete_uploaded_file(uploaded_file):
     """Remove the file from Gemini Files API after use."""
     try:
@@ -102,6 +111,8 @@ def delete_uploaded_file(uploaded_file):
         print(f"      Cleaned up uploaded file: {uploaded_file.name}")
     except Exception:
         pass
+
+
 if __name__ == "__main__":
     import glob
     import os

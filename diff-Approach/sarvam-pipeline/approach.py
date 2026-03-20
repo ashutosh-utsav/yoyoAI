@@ -5,13 +5,18 @@ import tempfile
 from dotenv import load_dotenv
 from sarvamai import SarvamAI
 from openai import OpenAI
+
 load_dotenv()
+
 SARVAM_KEY = os.getenv("SARVAM_AI_API")
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
+
 if not SARVAM_KEY or not OPENAI_KEY:
     raise ValueError("Missing API keys. Check SARVAM_AI_API and OPENAI_API_KEY in .env")
+
 sarvam_client = SarvamAI(api_subscription_key=SARVAM_KEY)
 openai_client = OpenAI(api_key=OPENAI_KEY)
+
 def get_diarized_transcript(audio_path, language_code="kn-IN", num_speakers=5):
     """
     Submits audio to Sarvam's Batch STT API with native diarization.
@@ -52,6 +57,8 @@ def get_diarized_transcript(audio_path, language_code="kn-IN", num_speakers=5):
         raise ValueError("Sarvam returned no diarized transcript entries. Check language_code or audio quality.")
     print(f"      Got {len(entries)} diarized segments across the audio.")
     return entries
+
+
 def label_speakers_with_openai(entries):
     """
     Sends the diarized transcript to GPT-4o.
@@ -109,6 +116,8 @@ Output ONLY a valid raw JSON object like this. No markdown, no explanation:
     speaker_labels = json.loads(raw_output.strip())
     print(f"      GPT-4o Speaker Labels: {speaker_labels}")
     return speaker_labels
+
+
 def compute_boundaries(entries, speaker_labels):
     """
     Pure Python: groups segments by role, returns min/max timestamps per conversation.

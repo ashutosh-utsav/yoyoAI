@@ -2,11 +2,15 @@ import os
 import time
 from dotenv import load_dotenv
 from pyannoteai.sdk import Client
+
 load_dotenv()
+
 API_KEY = os.getenv("PYANNOTE_API_KEY")
+
 if not API_KEY:
     raise ValueError("API Key not found. Please check your .env file.")
 client = Client(API_KEY)
+
 def get_transcript_data(audio_path):
     print(f"\n[1/3] Uploading {audio_path}...")
     media_url = client.upload(audio_path)
@@ -19,6 +23,8 @@ def get_transcript_data(audio_path):
         elif job["status"] in ["failed", "canceled"]:
             raise Exception("API Job failed.")
         time.sleep(5)
+
+
 def find_start_anchor(transcript, customer_start, staff_id):
     """Finds the staff's greeting right before the customer interaction starts."""
     greetings = ["hello", "hi", "welcome", "namaste", "namaskara", "morning", "sir", "ma'am", "nodona", "waiting"]
@@ -30,6 +36,8 @@ def find_start_anchor(transcript, customer_start, staff_id):
                     best_start = block["start"]
                     break 
     return best_start
+
+
 def find_end_anchor(transcript, customer_end, staff_id):
     """Finds the staff's farewell right after the customer finishes."""
     farewells = ["thank", "dhanyavada", "bill", "swipe", "cash", "bye", "day", "done"]
@@ -40,6 +48,8 @@ def find_end_anchor(transcript, customer_end, staff_id):
                 if any(word in block["text"].lower() for word in farewells):
                     best_end = max(best_end, block["end"])
     return best_end
+
+
 def analyze_lapel_sessions(transcript):
     print("[3/3] Executing Lapel Mic Protocol (Ephemerality Filtering)...")
     if not transcript:
@@ -97,6 +107,8 @@ def analyze_lapel_sessions(transcript):
         end_actual = find_end_anchor(transcript, conv["end"], main_staff)
         results[f"Conversation {i+1}"] = {"start": start_actual, "end": end_actual}
     return results
+
+
 if __name__ == "__main__":
     import glob
     import os

@@ -4,13 +4,18 @@ import json
 from dotenv import load_dotenv
 from pyannoteai.sdk import Client
 from openai import OpenAI
+
 load_dotenv()
+
 PYANNOTE_KEY = os.getenv("PYANNOTE_API_KEY")
+
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
+
 if not PYANNOTE_KEY or not OPENAI_KEY:
     raise ValueError("Missing API Keys. Check your .env file.")
 pyannote_client = Client(PYANNOTE_KEY)
 openai_client = OpenAI(api_key=OPENAI_KEY)
+
 def get_transcript_data(audio_path):
     print(f"\n[1/3] Uploading {audio_path} to Pyannote...")
     media_url = pyannote_client.upload(audio_path)
@@ -23,6 +28,8 @@ def get_transcript_data(audio_path):
         elif job["status"] in ["failed", "canceled"]:
             raise Exception("Pyannote API Job failed.")
         time.sleep(5)
+
+
 def analyze_with_openai(transcript_json):
     print("[3/3] Passing transcript to OpenAI for semantic boundary extraction...")
     script_text = ""
@@ -65,6 +72,8 @@ def analyze_with_openai(transcript_json):
     except json.JSONDecodeError as e:
         print(f"Failed to parse LLM output: {raw_output}")
         raise e
+
+
 if __name__ == "__main__":
     import glob
     import os
