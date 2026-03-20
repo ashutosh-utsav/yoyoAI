@@ -66,13 +66,26 @@ def analyze_with_openai(transcript_json):
         print(f"Failed to parse LLM output: {raw_output}")
         raise e
 if __name__ == "__main__":
-    audio_file = "audio/Sample3KN.mp3"
-    try:
-        raw_transcript = get_transcript_data(audio_file)
-        final_boundaries = analyze_with_openai(raw_transcript)
-        print("\n" + "="*40)
-        print("FINAL CONVERSATION BOUNDARIES (GPT-4o)")
-        print("="*40)
-        print(json.dumps(final_boundaries, indent=2))
-    except Exception as e:
-        print(f"\nPipeline Error: {e}")
+    import glob
+    import os
+    import json
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    audio_dir = os.path.join(base_path, "audio")
+    audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
+    
+    if not audio_files:
+        print(f"No audio files found in {audio_dir}.")
+        
+    for audio_file in audio_files:
+        print("\n" + "="*70)
+        print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
+        print("="*70)
+        try:
+            raw_transcript = get_transcript_data(audio_file)
+            final_boundaries = analyze_with_openai(raw_transcript)
+            print("\n" + "="*40)
+            print("FINAL CONVERSATION BOUNDARIES (GPT-4o)")
+            print("="*40)
+            print(json.dumps(final_boundaries, indent=2))
+        except Exception as e:
+            print(f"\nPipeline Error: {e}")

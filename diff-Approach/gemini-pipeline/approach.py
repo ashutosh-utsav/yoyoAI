@@ -103,34 +103,43 @@ def delete_uploaded_file(uploaded_file):
     except Exception:
         pass
 if __name__ == "__main__":
-    audio_file_path = "audio/sample3KN.mp3"
-    if not Path(audio_file_path).exists():
-        raise FileNotFoundError(f"Audio file not found: {audio_file_path}")
-    uploaded = None
-    try:
-        uploaded = upload_audio(audio_file_path)
-        result   = analyze_audio_with_gemini(uploaded)
-        print("\n" + "=" * 52)
-        print(f"FINAL RESULTS  (Gemini {MODEL_ID})")
-        print("=" * 52)
-        if "analysis" in result:
-            print(f"\n  Analysis: {result['analysis']}\n")
-        for conv_key in ["Conversation_1", "Conversation_2"]:
-            if conv_key in result:
-                c     = result[conv_key]
-                start = c.get("start_fmt", "??:??")
-                end   = c.get("end_fmt",   "??:??")
-                conf  = c.get("confidence", "?")
-                notes = c.get("notes", "")
-                label = conv_key.replace("_", " ")
-                print(f"  {label}: [ {start} --> {end} ]  (confidence: {conf})")
-                if notes:
-                    print(f"           Note: {notes}")
-        print("\n  --- Full JSON ---")
-        print(json.dumps(result, indent=2, ensure_ascii=False))
-    except Exception as e:
-        print(f"\nPipeline Error: {e}")
-        raise
-    finally:
-        if uploaded:
-            delete_uploaded_file(uploaded)
+    import glob
+    import os
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    audio_dir = os.path.join(base_path, "audio")
+    audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
+    
+    if not audio_files:
+        print(f"No audio files found in {audio_dir}.")
+        
+    for audio_file in audio_files:
+        print("\n" + "="*70)
+        print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
+        print("="*70)
+        uploaded = None
+        try:
+            uploaded = upload_audio(audio_file)
+            result   = analyze_audio_with_gemini(uploaded)
+            print("\n" + "=" * 52)
+            print(f"FINAL RESULTS  (Gemini {MODEL_ID})")
+            print("=" * 52)
+            if "analysis" in result:
+                print(f"\n  Analysis: {result['analysis']}\n")
+            for conv_key in ["Conversation_1", "Conversation_2"]:
+                if conv_key in result:
+                    c     = result[conv_key]
+                    start = c.get("start_fmt", "??:??")
+                    end   = c.get("end_fmt",   "??:??")
+                    conf  = c.get("confidence", "?")
+                    notes = c.get("notes", "")
+                    label = conv_key.replace("_", " ")
+                    print(f"  {label}: [ {start} --> {end} ]  (confidence: {conf})")
+                    if notes:
+                        print(f"           Note: {notes}")
+            print("\n  --- Full JSON ---")
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        except Exception as e:
+            print(f"\nPipeline Error: {e}")
+        finally:
+            if uploaded:
+                delete_uploaded_file(uploaded)

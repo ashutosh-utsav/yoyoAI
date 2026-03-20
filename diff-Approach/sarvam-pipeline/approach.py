@@ -131,22 +131,33 @@ def compute_boundaries(entries, speaker_labels):
         results[f"Conversation {i}"] = {"start": conv_start, "end": conv_end}
     return results
 if __name__ == "__main__":
-    audio_file     = "audio/Sample2EN.mp3"
-    language_code  = "en-IN"
-    try:
-        entries         = get_diarized_transcript(audio_file, language_code)
-        speaker_labels  = label_speakers_with_openai(entries)
-        boundaries      = compute_boundaries(entries, speaker_labels)
-        def fmt(seconds):
-            return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
-        print("\n" + "=" * 45)
-        print("FINAL CONVERSATION BOUNDARIES  (Sarvam + GPT-4o)")
-        print("=" * 45)
-        for conv, times in boundaries.items():
-            print(f"  {conv}: [ {fmt(times['start'])} --> {fmt(times['end'])} ]")
-        print("\n--- Raw LLM Speaker Labels ---")
-        for spk_id, role in speaker_labels.items():
-            print(f"  Speaker {spk_id} → {role}")
-    except Exception as e:
-        print(f"\nPipeline Error: {e}")
-        raise
+    import glob
+    import os
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    audio_dir = os.path.join(base_path, "audio")
+    audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
+    
+    if not audio_files:
+        print(f"No audio files found in {audio_dir}.")
+        
+    for audio_file in audio_files:
+        print("\n" + "="*70)
+        print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
+        print("="*70)
+        language_code  = "auto"
+        try:
+            entries         = get_diarized_transcript(audio_file, language_code)
+            speaker_labels  = label_speakers_with_openai(entries)
+            boundaries      = compute_boundaries(entries, speaker_labels)
+            def fmt(seconds):
+                return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
+            print("\n" + "=" * 45)
+            print("FINAL CONVERSATION BOUNDARIES  (Sarvam + GPT-4o)")
+            print("=" * 45)
+            for conv, times in boundaries.items():
+                print(f"  {conv}: [ {fmt(times['start'])} --> {fmt(times['end'])} ]")
+            print("\n--- Raw LLM Speaker Labels ---")
+            for spk_id, role in speaker_labels.items():
+                print(f"  Speaker {spk_id} → {role}")
+        except Exception as e:
+            print(f"\nPipeline Error: {e}")

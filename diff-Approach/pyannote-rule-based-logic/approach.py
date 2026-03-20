@@ -68,16 +68,30 @@ def find_conversation_boundaries(timeline):
         "Conversation 2": {"start": conv2_start, "end": conv2_end}
     }
 if __name__ == "__main__":
-    audio_file = "audio/Sample2EN.mp3"
-    print("Starting pipeline...")
-    raw_timeline = get_diarization_data(audio_file)
-    boundaries = find_conversation_boundaries(raw_timeline)
-    print("\n" + "="*40)
-    print("FINAL RESULTS")
-    print("="*40)
-    def format_time(seconds):
-        return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
-    for conv, times in boundaries.items():
-        start_fmt = format_time(times['start'])
-        end_fmt = format_time(times['end'])
-        print(f"{conv}: [ {start_fmt} --> {end_fmt} ]")
+    import glob
+    import os
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    audio_dir = os.path.join(base_path, "audio")
+    audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
+    
+    if not audio_files:
+        print(f"No audio files found in {audio_dir}.")
+        
+    for audio_file in audio_files:
+        print("\n" + "="*70)
+        print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
+        print("="*70)
+        try:
+            raw_timeline = get_diarization_data(audio_file)
+            boundaries = find_conversation_boundaries(raw_timeline)
+            print("\n" + "="*40)
+            print("FINAL RESULTS")
+            print("="*40)
+            def format_time(seconds):
+                return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
+            for conv, times in boundaries.items():
+                start_fmt = format_time(times['start'])
+                end_fmt = format_time(times['end'])
+                print(f"{conv}: [ {start_fmt} --> {end_fmt} ]")
+        except Exception as e:
+            print(f"\nPipeline Error: {e}")

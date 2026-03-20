@@ -77,13 +77,28 @@ def find_boundaries_via_density(timeline):
 
 
 if __name__ == "__main__":
-    audio_file = "audio/Sample1KN.mp3" 
-    raw_timeline = get_transcript_data(audio_file)
-    boundaries = find_boundaries_via_density(raw_timeline)
-    print("\n" + "="*40)
-    print("FINAL CONVERSATION BOUNDARIES")
-    print("="*40)
-    def format_time(seconds):
-        return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
-    for conv, times in boundaries.items():
-        print(f"{conv}: [ {format_time(times['start'])} --> {format_time(times['end'])} ]")
+    import glob
+    import os
+    base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    audio_dir = os.path.join(base_path, "audio")
+    audio_files = glob.glob(os.path.join(audio_dir, "*.mp3"))
+    
+    if not audio_files:
+        print(f"No audio files found in {audio_dir}.")
+        
+    for audio_file in audio_files:
+        print("\n" + "="*70)
+        print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
+        print("="*70)
+        try:
+            raw_timeline = get_transcript_data(audio_file)
+            boundaries = find_boundaries_via_density(raw_timeline)
+            print("\n" + "="*40)
+            print("FINAL CONVERSATION BOUNDARIES")
+            print("="*40)
+            def format_time(seconds):
+                return f"{int(seconds // 60):02d}:{int(seconds % 60):02d}"
+            for conv, times in boundaries.items():
+                print(f"{conv}: [ {format_time(times['start'])} --> {format_time(times['end'])} ]")
+        except Exception as e:
+            print(f"Pipeline Error: {e}")
