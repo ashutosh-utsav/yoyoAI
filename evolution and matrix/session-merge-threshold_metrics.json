@@ -1,0 +1,45 @@
+{
+  "approach_name": "session-merge-threshold",
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.4935,
+  "overall_start_error_sec": 6.18,
+  "overall_end_error_sec": 394.46,
+  "details": {
+    "Sample1KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.5691,
+        "Start_Error_sec": 12.33,
+        "End_Error_sec": 270.8,
+        "pred_start": 3.67,
+        "pred_end": 660.8,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
+    },
+    "Sample2EN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.4179,
+        "Start_Error_sec": 0.04,
+        "End_Error_sec": 518.12,
+        "pred_start": 17.96,
+        "pred_end": 908.12,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
+    },
+    "sample3KN.mp3": {
+      "Conversation 1": {
+        "status": "Missing or dropped"
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
+    }
+  }
+}

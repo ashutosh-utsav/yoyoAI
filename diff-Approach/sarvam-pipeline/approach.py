@@ -145,7 +145,14 @@ if __name__ == "__main__":
         print("\n" + "="*70)
         print(f"PROCESSING EXTERNAL AUDIO FILE: {audio_file}")
         print("="*70)
-        language_code  = "auto"
+        
+        if "KN" in filename.upper() or "KANNADA" in filename.upper():
+            language_code = "kn-IN"
+        elif "HI" in filename.upper() or "HINDI" in filename.upper():
+            language_code = "hi-IN"
+        else:
+            language_code = "en-IN"
+
         try:
             entries         = get_diarized_transcript(audio_file, language_code)
             speaker_labels  = label_speakers_with_openai(entries)

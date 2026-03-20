@@ -85,12 +85,25 @@ if __name__ == "__main__":
             final_boundaries = analyze_with_openai(raw_transcript)
             
             file_eval = {}
+            def parse_mmss(time_str):
+                try:
+                    if isinstance(time_str, float) or isinstance(time_str, int):
+                        return float(time_str)
+                    parts = str(time_str).split(":")
+                    if len(parts) == 2:
+                        return float(parts[0]) * 60 + float(parts[1])
+                    elif len(parts) == 3:
+                        return float(parts[0]) * 3600 + float(parts[1]) * 60 + float(parts[2])
+                except Exception:
+                    pass
+                return 0.0
+                
             if isinstance(final_boundaries, dict):
                 for conv, times in final_boundaries.items():
                     if isinstance(times, dict) and 'start' in times and 'end' in times:
                         file_eval[conv.replace("_", " ")] = {
-                            "start": round(float(times['start']), 2),
-                            "end": round(float(times['end']), 2)
+                            "start": round(parse_mmss(times['start']), 2),
+                            "end": round(parse_mmss(times['end']), 2)
                         }
             evaluation_results[filename] = file_eval
             print(f"-> Successfully processed {filename}")

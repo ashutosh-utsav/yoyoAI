@@ -1,0 +1,69 @@
+{
+  "approach_name": "gemini-pipeline",
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.771,
+  "overall_start_error_sec": 22.17,
+  "overall_end_error_sec": 39.92,
+  "details": {
+    "Sample1KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.9712,
+        "Start_Error_sec": 8.0,
+        "End_Error_sec": 3.0,
+        "pred_start": 8.0,
+        "pred_end": 387.0,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.5303,
+        "Start_Error_sec": 123.0,
+        "End_Error_sec": 1.0,
+        "pred_start": 397.0,
+        "pred_end": 661.0,
+        "true_start": 520.0,
+        "true_end": 660.0
+      }
+    },
+    "Sample2EN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.512,
+        "Start_Error_sec": 0.1,
+        "End_Error_sec": 181.5,
+        "pred_start": 17.9,
+        "pred_end": 208.5,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.9977,
+        "Start_Error_sec": 0.9,
+        "End_Error_sec": 0.0,
+        "pred_start": 525.9,
+        "pred_end": 921.0,
+        "true_start": 525.0,
+        "true_end": 921.0
+      }
+    },
+    "sample3KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.6197,
+        "Start_Error_sec": 0.0,
+        "End_Error_sec": 54.0,
+        "pred_start": 0.0,
+        "pred_end": 88.0,
+        "true_start": 0.0,
+        "true_end": 142.0
+      },
+      "Conversation 2": {
+        "IoU": 0.9953,
+        "Start_Error_sec": 1.0,
+        "End_Error_sec": 0.0,
+        "pred_start": 149.0,
+        "pred_end": 362.0,
+        "true_start": 148.0,
+        "true_end": 362.0
+      }
+    }
+  }
+}

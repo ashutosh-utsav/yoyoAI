@@ -1,0 +1,69 @@
+{
+  "approach_name": "dbscan-density-clustering",
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.6882,
+  "overall_start_error_sec": 75.68,
+  "overall_end_error_sec": 14.24,
+  "details": {
+    "Sample1KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.3626,
+        "Start_Error_sec": 231.29,
+        "End_Error_sec": 7.1,
+        "pred_start": 247.29,
+        "pred_end": 382.9,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.4727,
+        "Start_Error_sec": 99.39,
+        "End_Error_sec": 26.84,
+        "pred_start": 420.61,
+        "pred_end": 633.16,
+        "true_start": 520.0,
+        "true_end": 660.0
+      }
+    },
+    "Sample2EN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.9899,
+        "Start_Error_sec": 0.61,
+        "End_Error_sec": 3.13,
+        "pred_start": 18.61,
+        "pred_end": 386.87,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.9791,
+        "Start_Error_sec": 7.84,
+        "End_Error_sec": 0.59,
+        "pred_start": 517.16,
+        "pred_end": 920.41,
+        "true_start": 525.0,
+        "true_end": 921.0
+      }
+    },
+    "sample3KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.6825,
+        "Start_Error_sec": 0.24,
+        "End_Error_sec": 44.84,
+        "pred_start": 0.24,
+        "pred_end": 97.16,
+        "true_start": 0.0,
+        "true_end": 142.0
+      },
+      "Conversation 2": {
+        "IoU": 0.6421,
+        "Start_Error_sec": 114.73,
+        "End_Error_sec": 2.91,
+        "pred_start": 33.27,
+        "pred_end": 359.09,
+        "true_start": 148.0,
+        "true_end": 362.0
+      }
+    }
+  }
+}

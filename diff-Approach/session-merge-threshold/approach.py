@@ -53,8 +53,7 @@ def analyze_sessions(transcript):
             merged_sessions.append(current)
     merged_sessions.sort(key=lambda x: x["end"] - x["start"], reverse=True)
     if len(merged_sessions) < 2:
-        print("Warning: Could not isolate two distinct conversations.")
-        return None
+        print("Warning: Could not isolate two distinct conversations safely. Proceeding with best estimate...")
     final_2_conversations = merged_sessions[:2]
     final_2_conversations.sort(key=lambda x: x["start"])
     results = {}

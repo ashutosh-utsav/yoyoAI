@@ -1,0 +1,57 @@
+{
+  "approach_name": "lapel-ephemerality-keyword-anchor",
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.1774,
+  "overall_start_error_sec": 149.04,
+  "overall_end_error_sec": 222.67,
+  "details": {
+    "Sample1KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.0691,
+        "Start_Error_sec": 252.35,
+        "End_Error_sec": 95.8,
+        "pred_start": 268.35,
+        "pred_end": 294.2,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.2034,
+        "Start_Error_sec": 13.87,
+        "End_Error_sec": 97.65,
+        "pred_start": 533.87,
+        "pred_end": 562.35,
+        "true_start": 520.0,
+        "true_end": 660.0
+      }
+    },
+    "Sample2EN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.4372,
+        "Start_Error_sec": 0.04,
+        "End_Error_sec": 478.78,
+        "pred_start": 17.96,
+        "pred_end": 868.78,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
+    },
+    "sample3KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.0,
+        "Start_Error_sec": 329.88,
+        "End_Error_sec": 218.43,
+        "pred_start": 329.88,
+        "pred_end": 360.43,
+        "true_start": 0.0,
+        "true_end": 142.0
+      },
+      "Conversation 2": {
+        "status": "Missing or dropped"
+      }
+    }
+  }
+}

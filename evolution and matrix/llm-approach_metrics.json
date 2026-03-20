@@ -1,0 +1,69 @@
+{
+  "approach_name": "llm-approach",
+  "files_evaluated": 3,
+  "overall_mean_iou": 0.5718,
+  "overall_start_error_sec": 73.67,
+  "overall_end_error_sec": 13.33,
+  "details": {
+    "Sample1KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.7299,
+        "Start_Error_sec": 98.0,
+        "End_Error_sec": 3.0,
+        "pred_start": 114.0,
+        "pred_end": 387.0,
+        "true_start": 16.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.5571,
+        "Start_Error_sec": 13.0,
+        "End_Error_sec": 49.0,
+        "pred_start": 533.0,
+        "pred_end": 611.0,
+        "true_start": 520.0,
+        "true_end": 660.0
+      }
+    },
+    "Sample2EN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.9946,
+        "Start_Error_sec": 1.0,
+        "End_Error_sec": 1.0,
+        "pred_start": 17.0,
+        "pred_end": 389.0,
+        "true_start": 18.0,
+        "true_end": 390.0
+      },
+      "Conversation 2": {
+        "IoU": 0.9949,
+        "Start_Error_sec": 0.0,
+        "End_Error_sec": 2.0,
+        "pred_start": 525.0,
+        "pred_end": 919.0,
+        "true_start": 525.0,
+        "true_end": 921.0
+      }
+    },
+    "sample3KN.mp3": {
+      "Conversation 1": {
+        "IoU": 0.0,
+        "Start_Error_sec": 149.0,
+        "End_Error_sec": 25.0,
+        "pred_start": 149.0,
+        "pred_end": 167.0,
+        "true_start": 0.0,
+        "true_end": 142.0
+      },
+      "Conversation 2": {
+        "IoU": 0.1542,
+        "Start_Error_sec": 181.0,
+        "End_Error_sec": 0.0,
+        "pred_start": 329.0,
+        "pred_end": 362.0,
+        "true_start": 148.0,
+        "true_end": 362.0
+      }
+    }
+  }
+}

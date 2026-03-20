@@ -66,8 +66,15 @@ def analyze_lapel_sessions(transcript):
             valid_customers.append(spk)
     customer_blocks = [b for b in transcript if b["speaker"] in valid_customers]
     if not customer_blocks:
-        print("Warning: No valid customers found.")
-        return None
+        print("Warning: No valid customers found under strict rules. Using fallback...")
+        fallback_spks = sorted(speaker_stats.keys(), key=lambda x: speaker_stats[x]["turns"], reverse=True)
+        if len(fallback_spks) > 1:
+            valid_customers = [fallback_spks[1]]
+        elif len(fallback_spks) == 1:
+            valid_customers = [fallback_spks[0]]
+        customer_blocks = [b for b in transcript if b["speaker"] in valid_customers]
+        if not customer_blocks:
+            return None
     merged_sessions = []
     MERGE_THRESHOLD = 240.0
     for block in customer_blocks:
@@ -81,8 +88,7 @@ def analyze_lapel_sessions(transcript):
             merged_sessions.append({"start": block["start"], "end": block["end"]})
     merged_sessions.sort(key=lambda x: x["end"] - x["start"], reverse=True)
     if len(merged_sessions) < 2:
-        print("Warning: Could not isolate two distinct conversations.")
-        return None
+        print("Warning: Could not isolate two distinct conversations safely. Proceeding with the one block found...")
     final_2_conversations = merged_sessions[:2]
     final_2_conversations.sort(key=lambda x: x["start"])
     results = {}
