@@ -9,7 +9,7 @@ So basically, this approach came to my mind. What I am thinking right now is tha
 
 
 
-I found out DBSCAN, which basically groups the distinct conversations. I'm not only using DBSCAN in this interview; I am using the API of Pya. What it is doing is giving me a speaker identification of one: who is speaking. By the basic assumption I am making here is that the most top 20% of the samples are on the next to us speaker 1 and speaker 2, which is probably not right. Then I am using density clustering to find out customer speech times, time into DBSCAN using a random model.
+I found out DBSCAN, which basically groups the distinct conversations. I'm not only using DBSCAN in this interview; I am using the API of Pyannote. What it is doing is giving me a speaker identification of one: who is speaking. By the basic assumption I am making here is that the most top 20% of the samples are on the next to us speaker 1 and speaker 2, which is probably not right. Then I am using density clustering to find out customer speech times, time into DBSCAN using a random model.
 
 
 
